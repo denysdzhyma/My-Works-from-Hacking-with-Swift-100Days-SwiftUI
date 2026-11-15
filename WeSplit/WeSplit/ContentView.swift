@@ -27,6 +27,14 @@ struct ContentView: View {
         
         return amountPerPerson
     }
+    var totalWithTip: Double {
+        let tipSelection = Double(tipPercentage)
+        
+        let tipValue = checkAmount / 100 * tipSelection
+        let grandTotal = checkAmount + tipValue
+        
+        return grandTotal
+    }
     
     var body: some View {
         VStack {
@@ -43,13 +51,16 @@ struct ContentView: View {
                     }
                     Section("How much do you want to tip?") {
                         Picker("Tip percentage", selection: $tipPercentage) {
-                            ForEach(tipPercentages, id: \.self) {
+                            ForEach(0..<101) {
                                 Text($0, format: .percent)
                             }
-                        }.pickerStyle(.segmented)
+                        }.pickerStyle(.wheel)
                     }
-                    Section {
+                    Section("Amount per person") {
                         Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    }
+                    Section("Total with Tips") {
+                        Text(totalWithTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     }
                 }
                 .toolbar {
